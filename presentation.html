@@ -30,6 +30,10 @@ html{
   scroll-behavior:smooth;
 }
 
+html,body{
+  scroll-snap-type:y mandatory;
+}
+
 body{
   font-family:'Inter',sans-serif;
   background:radial-gradient(circle at top,#10193b 0%,var(--bg) 60%);
@@ -286,12 +290,27 @@ nav{
 }
 
 section{
-  padding:120px 8%;
+  min-height:100vh;
+  padding:140px 8% 100px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  position:relative;
+  scroll-snap-align:start;
 }
 
 .section-title{
   text-align:center;
   margin-bottom:60px;
+}
+
+.slide-label{
+  font-size:.9rem;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color:var(--blue);
+  margin-bottom:18px;
+  font-weight:700;
 }
 
 .section-title h2{
@@ -394,6 +413,20 @@ section{
   margin-bottom:8px;
 }
 
+section::after{
+  content:'';
+  position:absolute;
+  bottom:30px;
+  left:50%;
+  transform:translateX(-50%);
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  border:1px solid rgba(255,255,255,.08);
+  background:rgba(255,255,255,.03);
+  backdrop-filter:blur(10px);
+}
+
 footer{
   padding:60px 8%;
   border-top:1px solid rgba(255,255,255,.06);
@@ -459,6 +492,7 @@ footer{
 </nav>
 
 <section class="hero">
+  <div class="slide-label" style="position:absolute;top:110px;left:8%;">Титульный слайд</div>
   <div class="hero-inner reveal">
 
     <div>
@@ -508,6 +542,7 @@ footer{
 
 <section id="problem" class="reveal">
   <div class="section-title">
+    <div class="slide-label">Слайд презентации</div>
     <h2>Проблема проекта</h2>
     <p>
       Современные студенты сталкиваются с неопределённостью будущего рынка труда.
@@ -724,6 +759,7 @@ footer{
 </section>
 
 <footer>
+  <div style="margin-bottom:12px;font-size:1.1rem;font-weight:700;color:white;">Web Presentation Format</div>
   © 2026 • Конференция «ИИ в профессиях будущего»
 </footer>
 
