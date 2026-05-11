@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ИИ в профессиях будущего</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#050816;
+  --panel:rgba(255,255,255,0.06);
+  --stroke:rgba(255,255,255,0.12);
+  --text:#eef2ff;
+  --muted:#a6b0d8;
+  --blue:#4da3ff;
+  --purple:#8b5cf6;
+  --pink:#ff6ad5;
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+html,body{
+  scroll-snap-type:y mandatory;
+}
+
+body{
+  font-family:'Inter',sans-serif;
+  background:radial-gradient(circle at top,#10193b 0%,var(--bg) 60%);
+  color:var(--text);
+  overflow-x:hidden;
+}
+
+/* animated background */
+.bg{
+  position:fixed;
+  inset:0;
+  z-index:-2;
+}
+
+.blob{
+  position:absolute;
+  width:700px;
+  height:700px;
+  border-radius:50%;
+  filter:blur(120px);
+  opacity:.28;
+  animation:float 18s ease-in-out infinite;
+}
+
+.blob.one{
+  background:var(--purple);
+  top:-250px;
+  left:-250px;
+}
+
+.blob.two{
+  background:var(--blue);
+  bottom:-250px;
+  right:-250px;
+  animation-delay:4s;
+}
+
+.blob.three{
+  background:var(--pink);
+  top:40%;
+  left:45%;
+  width:400px;
+  height:400px;
+  opacity:.14;
+}
+
+@keyframes float{
+  0%,100%{transform:translate(0,0) scale(1)}
+  50%{transform:translate(60px,40px) scale(1.12)}
+}
+
+.grid-overlay{
+  position:fixed;
+  inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+  background-size:40px 40px;
+  mask-image:linear-gradient(to bottom,rgba(0,0,0,.5),transparent);
+  z-index:-1;
+}
+
+nav{
+  width:100%;
+  position:fixed;
+  top:0;
+  left:0;
+  padding:22px 8%;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  backdrop-filter:blur(16px);
+  background:rgba(5,8,22,.45);
+  border-bottom:1px solid rgba(255,255,255,.05);
+  z-index:999;
+}
+
+.logo{
+  font-weight:800;
+  font-size:1.05rem;
+  letter-spacing:.5px;
+}
+
+.logo span{
+  background:linear-gradient(90deg,var(--purple),var(--blue));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.nav-links{
+  display:flex;
+  gap:28px;
+}
+
+.nav-links a{
+  color:var(--muted);
+  text-decoration:none;
+  transition:.25s;
+  font-size:.95rem;
+}
+
+.nav-links a:hover{
+  color:white;
+}
+
+.hero{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:120px 8% 80px;
+}
+
+.hero-inner{
+  max-width:1200px;
+  width:100%;
+  display:grid;
+  grid-template-columns:1.1fr .9fr;
+  gap:50px;
+  align-items:center;
+}
+
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 18px;
+  border-radius:999px;
+  border:1px solid var(--stroke);
+  background:rgba(255,255,255,.04);
+  color:var(--muted);
+  margin-bottom:26px;
+}
+
+.hero h1{
+  font-size:clamp(3rem,6vw,5.6rem);
+  line-height:1;
+  font-weight:800;
+  margin-bottom:24px;
+}
+
+.gradient{
+  background:linear-gradient(90deg,var(--purple),var(--blue));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.hero p{
+  color:var(--muted);
+  font-size:1.12rem;
+  line-height:1.8;
+  max-width:720px;
+}
+
+.hero-actions{
+  display:flex;
+  gap:16px;
+  margin-top:34px;
+  flex-wrap:wrap;
+}
+
+.btn{
+  padding:16px 28px;
+  border-radius:16px;
+  border:none;
+  cursor:pointer;
+  text-decoration:none;
+  font-weight:700;
+  transition:.3s;
+}
+
+.btn-primary{
+  background:linear-gradient(135deg,var(--purple),var(--blue));
+  color:white;
+  box-shadow:0 20px 60px rgba(100,90,255,.35);
+}
+
+.btn-primary:hover{
+  transform:translateY(-4px);
+}
+
+.btn-secondary{
+  border:1px solid var(--stroke);
+  background:rgba(255,255,255,.04);
+  color:white;
+}
+
+.glass-card{
+  background:var(--panel);
+  border:1px solid var(--stroke);
+  border-radius:28px;
+  backdrop-filter:blur(18px);
+  padding:28px;
+  box-shadow:0 25px 80px rgba(0,0,0,.35);
+}
+
+.preview{
+  position:relative;
+}
+
+.preview::before{
+  content:'';
+  position:absolute;
+  inset:-1px;
+  border-radius:30px;
+  background:linear-gradient(135deg,var(--purple),transparent,var(--blue));
+  z-index:-1;
+  opacity:.5;
+}
+
+.screen{
+  background:#0d1328;
+  border-radius:22px;
+  overflow:hidden;
+}
+
+.screen-top{
+  display:flex;
+  gap:8px;
+  padding:14px 18px;
+  background:#11182f;
+}
+
+.dot{
+  width:12px;
+  height:12px;
+  border-radius:50%;
+}
+
+.dot:nth-child(1){background:#ff5f57}
+.dot:nth-child(2){background:#febc2e}
+.dot:nth-child(3){background:#28c840}
+
+.screen-content{
+  padding:40px;
+}
+
+.screen-content h3{
+  font-size:2rem;
+  margin-bottom:18px;
+}
+
+.screen-content p{
+  color:var(--muted);
+  line-height:1.7;
+}
+
+.fake-btn{
+  display:inline-block;
+  margin-top:24px;
+  padding:14px 22px;
+  border-radius:14px;
+  background:linear-gradient(135deg,var(--purple),var(--blue));
+}
+
+section{
+  min-height:100vh;
+  padding:140px 8% 100px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  position:relative;
+  scroll-snap-align:start;
+}
+
+.section-title{
+  text-align:center;
+  margin-bottom:60px;
+}
+
+.slide-label{
+  font-size:.9rem;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color:var(--blue);
+  margin-bottom:18px;
+  font-weight:700;
+}
+
+.section-title h2{
+  font-size:3rem;
+  margin-bottom:14px;
+}
+
+.section-title p{
+  color:var(--muted);
+  max-width:700px;
+  margin:auto;
+  line-height:1.7;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:24px;
+}
+
+.card h3{
+  margin-top:22px;
+  margin-bottom:12px;
+  font-size:1.3rem;
+}
+
+.card p{
+  color:var(--muted);
+  line-height:1.7;
+}
+
+.icon{
+  width:68px;
+  height:68px;
+  border-radius:18px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:1.8rem;
+  background:linear-gradient(135deg,var(--purple),var(--blue));
+}
+
+.timeline{
+  max-width:900px;
+  margin:auto;
+  display:flex;
+  flex-direction:column;
+  gap:24px;
+}
+
+.timeline-item{
+  display:grid;
+  grid-template-columns:120px 1fr;
+  gap:24px;
+  align-items:center;
+}
+
+.time{
+  font-size:1.4rem;
+  font-weight:800;
+  color:var(--blue);
+}
+
+.debate{
+  display:grid;
+  grid-template-columns:1fr 140px 1fr;
+  gap:30px;
+  align-items:center;
+}
+
+.side h3{
+  font-size:1.8rem;
+  margin-bottom:16px;
+}
+
+.side ul{
+  color:var(--muted);
+  padding-left:18px;
+  line-height:1.9;
+}
+
+.vs{
+  text-align:center;
+  font-size:3rem;
+  font-weight:800;
+  background:linear-gradient(135deg,var(--purple),var(--blue));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:22px;
+}
+
+.stat-number{
+  font-size:2.6rem;
+  font-weight:800;
+  margin-bottom:8px;
+}
+
+section::after{
+  content:'';
+  position:absolute;
+  bottom:30px;
+  left:50%;
+  transform:translateX(-50%);
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  border:1px solid rgba(255,255,255,.08);
+  background:rgba(255,255,255,.03);
+  backdrop-filter:blur(10px);
+}
+
+footer{
+  padding:60px 8%;
+  border-top:1px solid rgba(255,255,255,.06);
+  text-align:center;
+  color:var(--muted);
+}
+
+.reveal{
+  opacity:0;
+  transform:translateY(40px);
+  transition:1s ease;
+}
+
+.reveal.active{
+  opacity:1;
+  transform:translateY(0);
+}
+
+@media(max-width:980px){
+  .hero-inner,
+  .debate{
+    grid-template-columns:1fr;
+  }
+
+  .nav-links{
+    display:none;
+  }
+
+  .hero{
+    text-align:center;
+  }
+
+  .hero-actions{
+    justify-content:center;
+  }
+
+  .timeline-item{
+    grid-template-columns:1fr;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="bg">
+  <div class="blob one"></div>
+  <div class="blob two"></div>
+  <div class="blob three"></div>
+</div>
+
+<div class="grid-overlay"></div>
+
+<nav>
+  <div class="logo">AI<span>Future</span></div>
+
+  <div class="nav-links">
+    <a href="#problem">Проблема</a>
+    <a href="#concept">Концепция</a>
+    <a href="#program">Программа</a>
+    <a href="#results">Результаты</a>
+    <a href="#team">Команда</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="slide-label" style="position:absolute;top:110px;left:8%;">Титульный слайд</div>
+  <div class="hero-inner reveal">
+
+    <div>
+      <div class="badge">⚡ Научно-практическая конференция 2026</div>
+
+      <h1>
+        ИИ в профессиях
+        <span class="gradient">будущего</span>:
+        исчезнет ли человек?
+      </h1>
+
+      <p>
+        Масштабная студенческая конференция о будущем рынка труда, нейросетях,
+        автоматизации и навыках, которые останутся ценными даже в эпоху искусственного интеллекта.
+      </p>
+
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#program">Смотреть программу</a>
+        <a class="btn btn-secondary" href="#team">Организаторы</a>
+      </div>
+    </div>
+
+    <div class="preview glass-card">
+      <div class="screen">
+
+        <div class="screen-top">
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+        </div>
+
+        <div class="screen-content">
+          <h3>Человек VS ИИ</h3>
+          <p>
+            Заменит ли искусственный интеллект специалистов
+            или станет инструментом усиления человека?
+          </p>
+
+          <div class="fake-btn">Участвовать</div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section id="problem" class="reveal">
+  <div class="section-title">
+    <div class="slide-label">Слайд презентации</div>
+    <h2>Проблема проекта</h2>
+    <p>
+      Современные студенты сталкиваются с неопределённостью будущего рынка труда.
+      Искусственный интеллект уже заменяет рутинные задачи и меняет требования работодателей.
+      Проект помогает студентам понять, какие навыки будут востребованы в ближайшие годы.
+    </p>
+  </div>
+
+  <div class="grid">
+
+    <div class="glass-card card">
+      <div class="icon">🤖</div>
+      <h3>Автоматизация</h3>
+      <p>
+        ИИ берёт на себя рутинные задачи в аналитике, дизайне, тексте и программировании.
+      </p>
+    </div>
+
+    <div class="glass-card card">
+      <div class="icon">📈</div>
+      <h3>Новые профессии</h3>
+      <p>
+        AI-операторы, промпт-инженеры и специалисты по этике ИИ уже востребованы.
+      </p>
+    </div>
+
+    <div class="glass-card card">
+      <div class="icon">🧠</div>
+      <h3>Навыки будущего</h3>
+      <p>
+        Критическое мышление, эмпатия и креативность становятся главной ценностью.
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<section id="concept" class="reveal">
+  <div class="section-title">
+    <h2>Концепция мероприятия</h2>
+    <p>
+      Формат проекта сочетает научно-практическую конференцию, экспертные выступления,
+      дебаты и интерактивные сессии для студентов разных направлений.
+    </p>
+  </div>
+
+  <div class="grid">
+
+    <div class="glass-card card">
+      <div class="icon">🎤</div>
+      <h3>Конференция</h3>
+      <p>Выступления экспертов о влиянии ИИ на рынок труда и профессии будущего.</p>
+    </div>
+
+    <div class="glass-card card">
+      <div class="icon">⚔️</div>
+      <h3>Дебаты</h3>
+      <p>Интерактивный формат «Человек vs ИИ» с аргументами обеих сторон.</p>
+    </div>
+
+    <div class="glass-card card">
+      <div class="icon">🧩</div>
+      <h3>Практика</h3>
+      <p>Разбор кейсов, профессий будущего и использования нейросетей в обучении.</p>
+    </div>
+
+  </div>
+</section>
+
+<section id="program" class="reveal">
+  <div class="section-title">
+    <h2>Программа мероприятия</h2>
+    <p>
+      Конференция объединяет лекции, реальные кейсы, интерактивы и дебаты.
+    </p>
+  </div>
+
+  <div class="timeline">
+
+    <div class="timeline-item glass-card">
+      <div class="time">10:00</div>
+      <div>
+        <h3>Открытие конференции</h3>
+        <p>Приветствие участников и ввод в тему будущего профессий.</p>
+      </div>
+    </div>
+
+    <div class="timeline-item glass-card">
+      <div class="time">10:30</div>
+      <div>
+        <h3>Рынок труда 2030</h3>
+        <p>Какие профессии исчезнут, а какие станут востребованнее.</p>
+      </div>
+    </div>
+
+    <div class="timeline-item glass-card">
+      <div class="time">11:30</div>
+      <div>
+        <h3>Кейсы использования ИИ</h3>
+        <p>Примеры автоматизации в IT, дизайне, экономике и медиа.</p>
+      </div>
+    </div>
+
+    <div class="timeline-item glass-card">
+      <div class="time">12:30</div>
+      <div>
+        <h3>Дебаты «Человек vs ИИ»</h3>
+        <p>Главная интерактивная часть мероприятия с аргументами обеих сторон.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section id="debates" class="reveal">
+  <div class="section-title">
+    <h2>Главные дебаты</h2>
+    <p>
+      Две команды обсуждают, станет ли ИИ угрозой профессиям или инструментом усиления человека.
+    </p>
+  </div>
+
+  <div class="debate">
+
+    <div class="glass-card side">
+      <h3>ИИ заменит человека</h3>
+
+      <ul>
+        <li>Автоматизация ускоряется</li>
+        <li>Рутинные профессии исчезают</li>
+        <li>Нейросети работают быстрее</li>
+        <li>Компании сокращают расходы</li>
+      </ul>
+    </div>
+
+    <div class="vs">VS</div>
+
+    <div class="glass-card side">
+      <h3>ИИ усилит человека</h3>
+
+      <ul>
+        <li>ИИ — это инструмент</li>
+        <li>Человек управляет решениями</li>
+        <li>Креативность остаётся важной</li>
+        <li>Появляются новые профессии</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<section id="results" class="reveal">
+  <div class="section-title">
+    <h2>Ожидаемые результаты</h2>
+    <p>
+      Проект помогает студентам сформировать карьерное видение и снизить страх перед технологиями.
+    </p>
+  </div>
+
+  <div class="stats">
+
+    <div class="glass-card">
+      <div class="stat-number gradient">150+</div>
+      <p>участников</p>
+    </div>
+
+    <div class="glass-card">
+      <div class="stat-number gradient">5</div>
+      <p>тематических секций</p>
+    </div>
+
+    <div class="glass-card">
+      <div class="stat-number gradient">2</div>
+      <p>команды дебатов</p>
+    </div>
+
+    <div class="glass-card">
+      <div class="stat-number gradient">100%</div>
+      <p>актуальная тема</p>
+    </div>
+
+  </div>
+</section>
+
+<section id="team" class="reveal">
+  <div class="section-title">
+    <h2>Команда проекта</h2>
+    <p>
+      Над проектом работает студенческая команда: визуал, контент, лендинг, организация и продвижение.
+    </p>
+  </div>
+
+  <div class="grid">
+
+    <div class="glass-card card">
+      <div class="icon">🎨</div>
+      <h3>Александр Волков</h3>
+      <p>Визуальный отдел • разработка дизайна, афиши и оформления мероприятия.</p>
+    </div>
+
+    <div class="glass-card card">
+      <div class="icon">💻</div>
+      <h3>Мария Лебедева</h3>
+      <p>Лендинг и презентация • создание сайта мероприятия и интерактивной презентации.</p>
+    </div>
+
+    <div class="glass-card card">
+      <div class="icon">📢</div>
+      <h3>Даниил Соколов</h3>
+      <p>Контент и PR • посты для соцсетей, описание мероприятия и продвижение.</p>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div style="margin-bottom:12px;font-size:1.1rem;font-weight:700;color:white;">Web Presentation Format</div>
+  © 2026 • Конференция «ИИ в профессиях будущего»
+</footer>
+
+<script>
+const reveals = document.querySelectorAll('.reveal');
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting){
+      entry.target.classList.add('active');
+    }
+  })
+},{threshold:.15});
+
+reveals.forEach(item => observer.observe(item));
+</script>
+
+</body>
+</html>
